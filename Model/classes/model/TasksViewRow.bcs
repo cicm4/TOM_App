@@ -1,0 +1,12 @@
+//Groovy Scripts for model.TasksView
+
+package model
+
+import oracle.jbo.script.annotation.TransientValueExpression;
+
+@TransientValueExpression(attributeName="Status")
+def Status_ExpressionScript_Expression()
+{
+0
+}
+

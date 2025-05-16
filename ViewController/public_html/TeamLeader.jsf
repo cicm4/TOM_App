@@ -1,0 +1,574 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html>
+<f:view xmlns:f="http://java.sun.com/jsf/core" xmlns:af="http://xmlns.oracle.com/adf/faces/rich"
+        xmlns:h="http://java.sun.com/jsf/html">
+    <af:document title="TeamLeader.jsf" id="d1">
+        <af:messages id="m1"/>
+        <af:serverListener type="onloadEvent" method="#{StartTOM.LoadTeamLeader}"/>
+        <af:clientListener type="load" method="onLoadClient"/>
+        <af:form id="f1">
+            <af:panelStretchLayout id="psl1" styleClass="AFStretchWidth" topHeight="75px" dimensionsFrom="parent"
+                                   startWidth="50px">
+                <f:facet name="start"/>
+                <f:facet name="end"/>
+                <f:facet name="top">
+                    <af:panelGridLayout id="pgl9">
+                        <af:gridRow marginTop="5px" height="100px" marginBottom="5px" id="gr7">
+                            <af:gridCell marginStart="5px" width="34%" id="gc7">
+                                <af:panelGroupLayout id="pgl1">
+                                    <af:button id="b9" icon="#{resource['images:TOMRE.png']}" iconPosition="top"
+                                               inlineStyle="background-clip:inherit; background-origin:inherit; background-size:0% auto; border-image-width:0%; border-left-color:transparent; border-right-color:transparent; border-top-color:transparent; border-bottom-color:transparent; outline-color:transparent; outline-width:0px;"
+                                               action="returnA"/>
+                                </af:panelGroupLayout>
+                            </af:gridCell>
+                            <af:gridCell marginStart="5px" width="33%" id="gc8" halign="center" valign="middle">
+                                <af:outputFormatted value="TEAM LEADER CONSOLE" id="of12"
+                                                    inlineStyle="font-size:20px; font-weight:bolder;"/>
+                            </af:gridCell>
+                            <af:gridCell marginStart="5px" width="33%" marginEnd="5px" id="gc9" halign="center">
+                                <af:panelGroupLayout id="pgl10" layout="vertical">
+                                    <af:spacer width="10" height="5" id="s13"/>
+                                    <af:panelGroupLayout id="pgl3" halign="right">
+                                        <af:image source="#{resource['images:TeamIcon.png']}" id="i2"/>
+                                        <af:spacer width="5" height="10" id="s3"/>
+                                        <af:outputFormatted value="Team name: #{bindings.TeamName.inputValue}"
+                                                            id="of3"/>
+                                    </af:panelGroupLayout>
+                                    <af:spacer width="10" height="1" id="s14"/>
+                                    <af:panelGroupLayout id="pgl6" halign="right">
+                                        <af:image source="#{resource['images:StudentIcon.png']}" id="i3"/>
+                                        <af:spacer width="5" height="10" id="s4"/>
+                                        <af:outputFormatted value="student name: #{bindings.StudentName.inputValue}"
+                                                            id="of2"/>
+                                    </af:panelGroupLayout>
+                                </af:panelGroupLayout>
+                            </af:gridCell>
+                        </af:gridRow>
+                    </af:panelGridLayout>
+                </f:facet>
+                <f:facet name="bottom"/>
+                <f:facet name="center">
+                    <af:panelTabbed position="above" id="pt1" inlineStyle="background-color:transparent;">
+                        <af:showDetailItem id="Teams" text="Teams" inflexibleHeight="150" stretchChildren="first"
+                                           disclosed="true" rendered="false">
+                            <af:panelCollection id="pc2" styleClass="AFStretchWidth">
+                                <f:facet name="menus">
+                                    <af:menu text="Actions" id="m2">
+                                        <af:group id="g5">
+                                            <af:commandMenuItem actionListener="#{bindings.CreateInsert.execute}"
+                                                                text="Add" disabled="#{!bindings.CreateInsert.enabled}"
+                                                                id="cmi1"/>
+                                            <af:commandMenuItem actionListener="#{bindings.Delete.execute}"
+                                                                text="Delete" disabled="#{!bindings.Delete.enabled}"
+                                                                id="cmi2"/>
+                                        </af:group>
+                                        <af:group id="g6">
+                                            <af:commandMenuItem actionListener="#{bindings.Commit.execute}"
+                                                                text="Submit" disabled="#{!bindings.Commit.enabled}"
+                                                                id="cmi3"/>
+                                            <af:commandMenuItem actionListener="#{bindings.Rollback.execute}"
+                                                                text="Undo" disabled="#{!bindings.Rollback.enabled}"
+                                                                immediate="true" id="cmi4">
+                                                <af:resetActionListener/>
+                                            </af:commandMenuItem>
+                                        </af:group>
+                                    </af:menu>
+                                </f:facet>
+                                <f:facet name="toolbar">
+                                    <af:toolbar id="t4">
+                                        <af:button disabled="#{!bindings.Create.enabled}" id="b1"
+                                                   icon="#{resource['images:adicionar.png']}" rendered="true"
+                                                   actionListener="#{bindings.CreateInsert.execute}"
+                                                   shortDesc="Add Team"/>
+                                        <af:button actionListener="#{bindings.Delete.execute}"
+                                                   disabled="#{!bindings.Delete.enabled}" id="b2"
+                                                   icon="#{resource['images:dell.png']}" shortDesc="Delete"/>
+                                        <af:button actionListener="#{bindings.Commit.execute}"
+                                                   disabled="#{!bindings.Commit.enabled}" id="b4"
+                                                   icon="#{resource['images:Svae.png']}" shortDesc="Submit changes"
+                                                   partialTriggers="t1"/>
+                                        <af:button actionListener="#{bindings.Rollback.execute}"
+                                                   disabled="#{!bindings.Rollback.enabled}" immediate="true" id="b3"
+                                                   icon="#{resource['images:Eliminar.png']}" shortDesc="Undo">
+                                            <af:resetActionListener/>
+                                        </af:button>
+                                        <af:button id="b11" icon="#{resource['images:toTeam16bit.png']}"
+                                                   action="fromAToTL" shortDesc="To Team Leader view"/>
+                                        <af:button id="b10" action="AToS"
+                                                   icon="#{resource['images:toStudent16bit2.png']}"
+                                                   shortDesc="To Student View"/>
+                                    </af:toolbar>
+                                </f:facet>
+                                <af:table value="#{bindings.TeamsViewLv1.collectionModel}" var="row"
+                                          rows="#{bindings.TeamsViewLv1.rangeSize}"
+                                          emptyText="#{bindings.TeamsViewLv1.viewable ? 'No data to display.' : 'Access Denied.'}"
+                                          rowBandingInterval="0"
+                                          selectedRowKeys="#{bindings.TeamsViewLv1.collectionModel.selectedRow}"
+                                          selectionListener="#{bindings.TeamsViewLv1.collectionModel.makeCurrent}"
+                                          rowSelection="single" fetchSize="#{bindings.TeamsViewLv1.rangeSize}"
+                                          filterModel="#{bindings.TeamsViewLv1Query.queryDescriptor}"
+                                          filterVisible="true"
+                                          queryListener="#{bindings.TeamsViewLv1Query.processQuery}" varStatus="vs"
+                                          id="t1" partialTriggers="::cmi1 ::cmi2 ::b1 ::b2 ::b4" summary="Table's Teams"
+                                          inlineStyle="height:auto;" verticalGridVisible="false">
+                                    <af:column sortProperty="#{bindings.TeamsViewLv1.hints.TeamId.name}"
+                                               filterable="true" sortable="true"
+                                               headerText="#{bindings.TeamsViewLv1.hints.TeamId.label}" id="c2"
+                                               width="148">
+                                        <af:inputText value="#{row.bindings.TeamId.inputValue}"
+                                                      label="#{bindings.TeamsViewLv1.hints.TeamId.label}"
+                                                      required="#{bindings.TeamsViewLv1.hints.TeamId.mandatory}"
+                                                      columns="#{bindings.TeamsViewLv1.hints.TeamId.displayWidth}"
+                                                      maximumLength="#{bindings.TeamsViewLv1.hints.TeamId.precision}"
+                                                      shortDesc="#{bindings.TeamsViewLv1.hints.TeamId.tooltip}"
+                                                      id="it2">
+                                            <f:validator binding="#{row.bindings.TeamId.validator}"/>
+                                            <af:convertNumber groupingUsed="false"
+                                                              pattern="#{bindings.TeamsViewLv1.hints.TeamId.format}"/>
+                                        </af:inputText>
+                                    </af:column>
+                                    <af:column sortProperty="#{bindings.TeamsViewLv1.hints.TeamName.name}"
+                                               filterable="true" sortable="true"
+                                               headerText="#{bindings.TeamsViewLv1.hints.TeamName.label}" id="c3"
+                                               width="100">
+                                        <af:inputText value="#{row.bindings.TeamName.inputValue}"
+                                                      label="#{bindings.TeamsViewLv1.hints.TeamName.label}"
+                                                      required="#{bindings.TeamsViewLv1.hints.TeamName.mandatory}"
+                                                      columns="#{bindings.TeamsViewLv1.hints.TeamName.displayWidth}"
+                                                      maximumLength="#{bindings.TeamsViewLv1.hints.TeamName.precision}"
+                                                      shortDesc="#{bindings.TeamsViewLv1.hints.TeamName.tooltip}"
+                                                      id="it3">
+                                            <f:validator binding="#{row.bindings.TeamName.validator}"/>
+                                        </af:inputText>
+                                    </af:column>
+                                    <af:column sortProperty="#{bindings.TeamsViewLv1.hints.TeamLeaderId.name}"
+                                               filterable="true" sortable="true"
+                                               headerText="#{bindings.TeamsViewLv1.hints.TeamLeaderId.label}" id="c4"
+                                               width="100">
+                                        <af:inputText value="#{row.bindings.TeamLeaderId.inputValue}"
+                                                      label="#{bindings.TeamsViewLv1.hints.TeamLeaderId.label}"
+                                                      required="#{bindings.TeamsViewLv1.hints.TeamLeaderId.mandatory}"
+                                                      columns="#{bindings.TeamsViewLv1.hints.TeamLeaderId.displayWidth}"
+                                                      maximumLength="#{bindings.TeamsViewLv1.hints.TeamLeaderId.precision}"
+                                                      shortDesc="#{bindings.TeamsViewLv1.hints.TeamLeaderId.tooltip}"
+                                                      id="it4">
+                                            <f:validator binding="#{row.bindings.TeamLeaderId.validator}"/>
+                                            <af:convertNumber groupingUsed="false"
+                                                              pattern="#{bindings.TeamsViewLv1.hints.TeamLeaderId.format}"/>
+                                        </af:inputText>
+                                    </af:column>
+                                    <af:column sortProperty="#{bindings.TeamsViewLv1.hints.Helped.name}"
+                                               filterable="true" sortable="true"
+                                               headerText="#{bindings.TeamsViewLv1.hints.Helped.label}" id="c5"
+                                               width="101" noWrap="false">
+                                        <af:inputText value="#{row.bindings.Helped.inputValue}"
+                                                      label="#{bindings.TeamsViewLv1.hints.Helped.label}"
+                                                      required="#{bindings.TeamsViewLv1.hints.Helped.mandatory}"
+                                                      columns="#{bindings.TeamsViewLv1.hints.Helped.displayWidth}"
+                                                      maximumLength="#{bindings.TeamsViewLv1.hints.Helped.precision}"
+                                                      shortDesc="#{bindings.TeamsViewLv1.hints.Helped.tooltip}"
+                                                      id="it5">
+                                            <f:validator binding="#{row.bindings.Helped.validator}"/>
+                                        </af:inputText>
+                                    </af:column>
+                                </af:table>
+                                <f:facet name="statusbar">
+                                    <af:toolbar id="t9">
+                                        <af:outputFormatted value="USER: #{StartTOM.email}" id="of13"
+                                                            inlineStyle="font-weight:bolder;"/>
+                                    </af:toolbar>
+                                </f:facet>
+                            </af:panelCollection>
+                        </af:showDetailItem>
+                        <af:showDetailItem id="Users" text="Users" disclosed="true" stretchChildren="first">
+                            <af:panelCollection id="pc3" featuresOff="wrapMenuItem">
+                                <f:facet name="menus">
+                                    <af:menu text="Actions" id="m3">
+                                        <af:group id="g3">
+                                            <af:commandMenuItem text="Add" disabled="#{!bindings.CreateInsert1.enabled}"
+                                                                id="cmi8"
+                                                                actionListener="#{bindings.CreateInsert1.execute}"/>
+                                            <af:commandMenuItem actionListener="#{bindings.Delete1.execute}"
+                                                                text="Delete" disabled="#{!bindings.Delete1.enabled}"
+                                                                id="cmi7"/>
+                                        </af:group>
+                                        <af:group id="g4">
+                                            <af:commandMenuItem actionListener="#{bindings.Commit.execute}"
+                                                                text="Submit" disabled="#{!bindings.Commit.enabled}"
+                                                                id="cmi6"/>
+                                            <af:commandMenuItem actionListener="#{bindings.Rollback.execute}"
+                                                                text="Undo" disabled="#{!bindings.Rollback.enabled}"
+                                                                immediate="true" id="cmi5">
+                                                <af:resetActionListener/>
+                                            </af:commandMenuItem>
+                                        </af:group>
+                                    </af:menu>
+                                </f:facet>
+                                <f:facet name="toolbar">
+                                    <af:toolbar id="t6">
+                                        <af:button disabled="#{!bindings.CreateInsert1.enabled}" id="b5"
+                                                   actionListener="#{bindings.CreateInsert1.execute}"
+                                                   icon="#{resource['images:adicionar.png']}" shortDesc="Add Student"/>
+                                        <af:button actionListener="#{bindings.Delete1.execute}"
+                                                   disabled="#{!bindings.Delete1.enabled}" id="b6"
+                                                   icon="#{resource['images:dell.png']}" shortDesc="Delete"/>
+                                        <af:button actionListener="#{bindings.Commit.execute}"
+                                                   disabled="#{!bindings.Commit.enabled}" id="b7"
+                                                   icon="#{resource['images:Svae.png']}" shortDesc="Submit Changes"/>
+                                        <af:button actionListener="#{bindings.Rollback.execute}"
+                                                   disabled="#{!bindings.Rollback.enabled}" immediate="true" id="b8"
+                                                   icon="#{resource['images:eliminar.png']}" shortDesc="Undo">
+                                            <af:resetActionListener/>
+                                        </af:button>
+                                        <af:button id="b12" icon="#{resource['images:toTeam16bit.png']}"
+                                                   action="fromAToTL" shortDesc="To Team Leader View"/>
+                                        <af:button id="b13" shortDesc="To Student View"
+                                                   icon="#{resource['images:toStudent16bit2.png']}" action="AToS"/>
+                                        <af:button id="b22" icon="#{resource['images:adicionarSin.png']}"/>
+                                    </af:toolbar>
+                                </f:facet>
+                                <af:table value="#{bindings.UsersViewLv1.collectionModel}" var="row"
+                                          rows="#{bindings.UsersViewLv1.rangeSize}"
+                                          emptyText="#{bindings.UsersViewLv1.viewable ? 'No data to display.' : 'Access Denied.'}"
+                                          rowBandingInterval="0"
+                                          selectedRowKeys="#{bindings.UsersViewLv1.collectionModel.selectedRow}"
+                                          selectionListener="#{bindings.UsersViewLv1.collectionModel.makeCurrent}"
+                                          rowSelection="single" fetchSize="#{bindings.UsersViewLv1.rangeSize}"
+                                          filterModel="#{bindings.UsersViewLv1Query.queryDescriptor}"
+                                          filterVisible="true"
+                                          queryListener="#{bindings.UsersViewLv1Query.processQuery}" varStatus="vs"
+                                          id="t2" partialTriggers="::cmi8 ::cmi7 ::cmi6 ::cmi5 ::b5 ::b6 :::p1 :::b24"
+                                          columnStretching="multiple" width="1456">
+                                    <af:column sortProperty="#{bindings.UsersViewLv1.hints.Checkmark.name}"
+                                               filterable="true" sortable="true" id="c6" width="43"/>
+                                    <af:column sortProperty="#{bindings.UsersViewLv1.hints.StudentId.name}"
+                                               filterable="true" sortable="true" headerText="Student ID" id="c7"
+                                               width="157">
+                                        <af:inputText value="#{row.bindings.StudentId.inputValue}"
+                                                      label="#{bindings.UsersViewLv1.hints.StudentId.label}"
+                                                      required="#{bindings.UsersViewLv1.hints.StudentId.mandatory}"
+                                                      columns="#{bindings.UsersViewLv1.hints.StudentId.displayWidth}"
+                                                      maximumLength="#{bindings.UsersViewLv1.hints.StudentId.precision}"
+                                                      shortDesc="#{bindings.UsersViewLv1.hints.StudentId.tooltip}"
+                                                      id="it6">
+                                            <f:validator binding="#{row.bindings.StudentId.validator}"/>
+                                            <af:convertNumber groupingUsed="false"
+                                                              pattern="#{bindings.UsersViewLv1.hints.StudentId.format}"/>
+                                        </af:inputText>
+                                    </af:column>
+                                    <af:column sortProperty="#{bindings.UsersViewLv1.hints.StudentName.name}"
+                                               filterable="true" sortable="true" headerText="Student Name" id="c8"
+                                               width="100">
+                                        <af:inputText value="#{row.bindings.StudentName.inputValue}"
+                                                      label="#{bindings.UsersViewLv1.hints.StudentName.label}"
+                                                      required="#{bindings.UsersViewLv1.hints.StudentName.mandatory}"
+                                                      columns="#{bindings.UsersViewLv1.hints.StudentName.displayWidth}"
+                                                      maximumLength="#{bindings.UsersViewLv1.hints.StudentName.precision}"
+                                                      shortDesc="#{bindings.UsersViewLv1.hints.StudentName.tooltip}"
+                                                      id="it7">
+                                            <f:validator binding="#{row.bindings.StudentName.validator}"/>
+                                        </af:inputText>
+                                    </af:column>
+                                    <af:column sortProperty="#{bindings.UsersViewLv1.hints.StudentEmail.name}"
+                                               filterable="true" sortable="true" headerText="Email" id="c9" width="100">
+                                        <af:inputText value="#{row.bindings.StudentEmail.inputValue}"
+                                                      label="#{bindings.UsersViewLv1.hints.StudentEmail.label}"
+                                                      required="#{bindings.UsersViewLv1.hints.StudentEmail.mandatory}"
+                                                      columns="#{bindings.UsersViewLv1.hints.StudentEmail.displayWidth}"
+                                                      maximumLength="#{bindings.UsersViewLv1.hints.StudentEmail.precision}"
+                                                      shortDesc="#{bindings.UsersViewLv1.hints.StudentEmail.tooltip}"
+                                                      id="it8">
+                                            <f:validator binding="#{row.bindings.StudentEmail.validator}"/>
+                                        </af:inputText>
+                                    </af:column>
+                                    <af:column sortProperty="#{bindings.UsersViewLv1.hints.AuthLevel.name}"
+                                               filterable="true" sortable="true" headerText="Authority" id="c10"
+                                               width="100">
+                                        <af:inputText value="#{row.bindings.AuthLevel.inputValue}"
+                                                      label="#{bindings.UsersViewLv1.hints.AuthLevel.label}"
+                                                      required="#{bindings.UsersViewLv1.hints.AuthLevel.mandatory}"
+                                                      columns="#{bindings.UsersViewLv1.hints.AuthLevel.displayWidth}"
+                                                      maximumLength="#{bindings.UsersViewLv1.hints.AuthLevel.precision}"
+                                                      shortDesc="#{bindings.UsersViewLv1.hints.AuthLevel.tooltip}"
+                                                      id="it9">
+                                            <f:validator binding="#{row.bindings.AuthLevel.validator}"/>
+                                            <af:convertNumber groupingUsed="false"
+                                                              pattern="#{bindings.UsersViewLv1.hints.AuthLevel.format}"/>
+                                        </af:inputText>
+                                    </af:column>
+                                    <af:column sortProperty="#{bindings.UsersViewLv1.hints.StudentPassword.name}"
+                                               filterable="true" sortable="true" headerText="Password" id="c11"
+                                               width="112">
+                                        <af:inputText value="#{row.bindings.StudentPassword.inputValue}"
+                                                      label="#{bindings.UsersViewLv1.hints.StudentPassword.label}"
+                                                      required="#{bindings.UsersViewLv1.hints.StudentPassword.mandatory}"
+                                                      columns="#{bindings.UsersViewLv1.hints.StudentPassword.displayWidth}"
+                                                      maximumLength="#{bindings.UsersViewLv1.hints.StudentPassword.precision}"
+                                                      shortDesc="#{bindings.UsersViewLv1.hints.StudentPassword.tooltip}"
+                                                      id="it10">
+                                            <f:validator binding="#{row.bindings.StudentPassword.validator}"/>
+                                        </af:inputText>
+                                    </af:column>
+                                    <af:column headerText="#{bindings.UsersViewLv1.hints.Timespent.label}" id="c12">
+                                        <af:inputText value="#{row.bindings.Timespent.inputValue}"
+                                                      label="#{bindings.UsersViewLv1.hints.Timespent.label}"
+                                                      required="#{bindings.UsersViewLv1.hints.Timespent.mandatory}"
+                                                      columns="#{bindings.UsersViewLv1.hints.Timespent.displayWidth}"
+                                                      maximumLength="#{bindings.UsersViewLv1.hints.Timespent.precision}"
+                                                      shortDesc="#{bindings.UsersViewLv1.hints.Timespent.tooltip}"
+                                                      id="it11" readOnly="true">
+                                            <f:validator binding="#{row.bindings.Timespent.validator}"/>
+                                        </af:inputText>
+                                    </af:column>
+                                    <af:column sortProperty="#{bindings.UsersViewLv1.hints.TeamId.name}"
+                                               filterable="true" sortable="true" headerText="Team ID" id="c13"
+                                               width="100" rendered="false">
+                                        <af:inputText value="#{row.bindings.TeamId.inputValue}"
+                                                      label="#{bindings.UsersViewLv1.hints.TeamId.label}"
+                                                      required="#{bindings.UsersViewLv1.hints.TeamId.mandatory}"
+                                                      columns="#{bindings.UsersViewLv1.hints.TeamId.displayWidth}"
+                                                      maximumLength="#{bindings.UsersViewLv1.hints.TeamId.precision}"
+                                                      shortDesc="#{bindings.UsersViewLv1.hints.TeamId.tooltip}"
+                                                      id="it12">
+                                            <f:validator binding="#{row.bindings.TeamId.validator}"/>
+                                            <af:convertNumber groupingUsed="false"
+                                                              pattern="#{bindings.UsersViewLv1.hints.TeamId.format}"/>
+                                        </af:inputText>
+                                    </af:column>
+                                </af:table>
+                                <f:facet name="statusbar">
+                                    <af:toolbar id="t8">
+                                        <af:outputFormatted id="of1" value="USER: #{StartTOM.email}"
+                                                            inlineStyle="font-weight:bolder;"/>
+                                    </af:toolbar>
+                                </f:facet>
+                            </af:panelCollection>
+                        </af:showDetailItem>
+                        <af:showDetailItem id="Tasks" text="Tasks" disclosed="true" stretchChildren="first">
+                            <af:panelCollection id="pc1" inlineStyle="width:836px;">
+                                <f:facet name="menus">
+                                    <af:menu text="Actions" id="m4">
+                                        <af:group id="g2">
+                                            <af:commandMenuItem actionListener="#{bindings.CreateInsert3.execute}"
+                                                                text="Add" disabled="#{!bindings.CreateInsert3.enabled}"
+                                                                id="cmi12"/>
+                                            <af:commandMenuItem actionListener="#{bindings.Delete3.execute}"
+                                                                text="Delete" disabled="#{!bindings.Delete3.enabled}"
+                                                                id="cmi11"/>
+                                        </af:group>
+                                        <af:group id="g1">
+                                            <af:commandMenuItem actionListener="#{bindings.Rollback.execute}"
+                                                                text="Undo" disabled="#{!bindings.Rollback.enabled}"
+                                                                immediate="true" id="cmi9">
+                                                <af:resetActionListener/>
+                                            </af:commandMenuItem>
+                                            <af:commandMenuItem actionListener="#{bindings.Commit.execute}"
+                                                                text="Submit" disabled="#{!bindings.Commit.enabled}"
+                                                                id="cmi10"/>
+                                        </af:group>
+                                    </af:menu>
+                                </f:facet>
+                                <f:facet name="toolbar">
+                                    <af:toolbar id="t5">
+                                        <af:button disabled="#{!bindings.CreateInsert3.enabled}" id="b14"
+                                                   icon="#{resource['images:adicionar.png']}"
+                                                   actionListener="#{bindings.CreateInsert3.execute}"
+                                                   shortDesc="Add Task"/>
+                                        <af:button actionListener="#{bindings.Delete2.execute}"
+                                                   disabled="#{!bindings.Delete2.enabled}" id="b15"
+                                                   icon="#{resource['images:dell.png']}" shortDesc="Delete"/>
+                                        <af:button actionListener="#{bindings.Commit.execute}"
+                                                   disabled="#{!bindings.Commit.enabled}" id="b16"
+                                                   icon="#{resource['images:Svae.png']}" shortDesc="Submit Changes"
+                                                   partialTriggers="t3"/>
+                                        <af:button actionListener="#{bindings.Rollback.execute}"
+                                                   disabled="#{!bindings.Rollback.enabled}" immediate="true" id="b17"
+                                                   icon="#{resource['images:eliminar.png']}" shortDesc="Undo">
+                                            <af:resetActionListener/>
+                                        </af:button>
+                                        <af:button id="b18" icon="#{resource['images:toTeam16bit.png']}"
+                                                   action="fromAToTL" shortDesc="To Team Leader View"/>
+                                        <af:button id="b19" icon="#{resource['images:toStudent16bit2.png']}"
+                                                   action="AToS" shortDesc="To Student View"/>
+                                        <af:button id="b20" icon="#{resource['images:editar.png']}"
+                                                   shortDesc="Manage Tasks" action="#{Timer.startTimerPopup}">
+                                            <af:showPopupBehavior popupId="::p1"/>
+                                        </af:button>
+                                        <af:button id="b21" icon="#{resource['images:adicionarSin.png']}"/>
+                                    </af:toolbar>
+                                </f:facet>
+                                <af:table value="#{bindings.TasksViewLv1.collectionModel}" var="row"
+                                          rows="#{bindings.TasksViewLv1.rangeSize}"
+                                          emptyText="#{bindings.TasksViewLv1.viewable ? 'No data to display.' : 'Access Denied.'}"
+                                          rowBandingInterval="0"
+                                          selectedRowKeys="#{bindings.TasksViewLv1.collectionModel.selectedRow}"
+                                          selectionListener="#{bindings.TasksViewLv1.collectionModel.makeCurrent}"
+                                          rowSelection="single" fetchSize="#{bindings.TasksViewLv1.rangeSize}"
+                                          filterModel="#{bindings.TasksViewLv1Query.queryDescriptor}"
+                                          filterVisible="true"
+                                          queryListener="#{bindings.TasksViewLv1Query.processQuery}" varStatus="vs"
+                                          id="t3" partialTriggers="::cmi12 ::cmi11 ::b14" binding="#{Timer.taskTable}">
+                                    <af:column sortProperty="#{bindings.TasksViewLv1.hints.TaskId.name}"
+                                               filterable="true" sortable="true"
+                                               headerText="#{bindings.TasksViewLv1.hints.TaskId.label}" id="c14">
+                                        <af:inputText value="#{row.bindings.TaskId.inputValue}"
+                                                      label="#{bindings.TasksViewLv1.hints.TaskId.label}"
+                                                      required="#{bindings.TasksViewLv1.hints.TaskId.mandatory}"
+                                                      columns="#{bindings.TasksViewLv1.hints.TaskId.displayWidth}"
+                                                      maximumLength="#{bindings.TasksViewLv1.hints.TaskId.precision}"
+                                                      shortDesc="#{bindings.TasksViewLv1.hints.TaskId.tooltip}"
+                                                      id="it1">
+                                            <f:validator binding="#{row.bindings.TaskId.validator}"/>
+                                            <af:convertNumber groupingUsed="false"
+                                                              pattern="#{bindings.TasksViewLv1.hints.TaskId.format}"/>
+                                        </af:inputText>
+                                    </af:column>
+                                    <af:column sortProperty="#{bindings.TasksViewLv1.hints.TaskName.name}"
+                                               filterable="true" sortable="true"
+                                               headerText="#{bindings.TasksViewLv1.hints.TaskName.label}" id="c15">
+                                        <af:inputText value="#{row.bindings.TaskName.inputValue}"
+                                                      label="#{bindings.TasksViewLv1.hints.TaskName.label}"
+                                                      required="#{bindings.TasksViewLv1.hints.TaskName.mandatory}"
+                                                      columns="#{bindings.TasksViewLv1.hints.TaskName.displayWidth}"
+                                                      maximumLength="#{bindings.TasksViewLv1.hints.TaskName.precision}"
+                                                      shortDesc="#{bindings.TasksViewLv1.hints.TaskName.tooltip}"
+                                                      id="it13">
+                                            <f:validator binding="#{row.bindings.TaskName.validator}"/>
+                                        </af:inputText>
+                                    </af:column>
+                                    <af:column sortProperty="#{bindings.TasksViewLv1.hints.TaskType.name}"
+                                               filterable="true" sortable="true"
+                                               headerText="#{bindings.TasksViewLv1.hints.TaskType.label}" id="c16">
+                                        <af:inputText value="#{row.bindings.TaskType.inputValue}"
+                                                      label="#{bindings.TasksViewLv1.hints.TaskType.label}"
+                                                      required="#{bindings.TasksViewLv1.hints.TaskType.mandatory}"
+                                                      columns="#{bindings.TasksViewLv1.hints.TaskType.displayWidth}"
+                                                      maximumLength="#{bindings.TasksViewLv1.hints.TaskType.precision}"
+                                                      shortDesc="#{bindings.TasksViewLv1.hints.TaskType.tooltip}"
+                                                      id="it14">
+                                            <f:validator binding="#{row.bindings.TaskType.validator}"/>
+                                        </af:inputText>
+                                    </af:column>
+                                    <af:column sortProperty="#{bindings.TasksViewLv1.hints.Starttime.name}"
+                                               filterable="true" sortable="true"
+                                               headerText="#{bindings.TasksViewLv1.hints.Starttime.label}" id="c17">
+                                        <f:facet name="filter">
+                                            <af:inputDate value="#{bindings.TasksViewLv1Query.queryDescriptor.filterConjunctionCriterion.criterionMap.Starttime.value}"
+                                                          id="id1">
+                                                <af:convertDateTime pattern="#{bindings.TasksViewLv1.hints.Starttime.format}"/>
+                                            </af:inputDate>
+                                        </f:facet>
+                                        <af:inputDate value="#{row.bindings.Starttime.inputValue}"
+                                                      label="#{bindings.TasksViewLv1.hints.Starttime.label}"
+                                                      required="#{bindings.TasksViewLv1.hints.Starttime.mandatory}"
+                                                      columns="#{bindings.TasksViewLv1.hints.Starttime.displayWidth}"
+                                                      shortDesc="#{bindings.TasksViewLv1.hints.Starttime.tooltip}"
+                                                      id="id2" binding="#{Timer.startTime}" readOnly="true">
+                                            <f:validator binding="#{row.bindings.Starttime.validator}"/>
+                                            <af:convertDateTime pattern="#{bindings.TasksViewLv1.hints.Starttime.format}"/>
+                                        </af:inputDate>
+                                    </af:column>
+                                    <af:column id="c1" headerText="Status" sortable="true" filterable="true">
+                                        <af:outputText value="#{row.Status}"
+                                                       shortDesc="#{bindings.TasksViewLv1.hints.Status.tooltip}"
+                                                       id="ot1">
+                                            <af:convertNumber groupingUsed="false"
+                                                              pattern="#{bindings.TasksViewLv1.hints.Status.format}"/>
+                                        </af:outputText>
+                                    </af:column>
+                                </af:table>
+                                <f:facet name="statusbar">
+                                    <af:toolbar id="t10">
+                                        <af:outputFormatted value="USER: #{StartTOM.email}" id="of14"
+                                                            inlineStyle="font-weight:bolder;"/>
+                                    </af:toolbar>
+                                </f:facet>
+                            </af:panelCollection>
+                        </af:showDetailItem>
+                    </af:panelTabbed>
+                </f:facet>
+            </af:panelStretchLayout>
+            <af:popup childCreation="deferred" autoCancel="disabled" id="p1" contentDelivery="lazyUncached"
+                      partialTriggers="pc1:t3" popupFetchListener="#{Timer.onPopup}" binding="#{Timer.myPopup}">
+                <af:dialog id="d2" resize="on" title="Task Editor" type="none">
+                    <f:facet name="buttonBar">
+                        <af:toolbar id="t7">
+                            <af:button text="Start" id="b23" binding="#{Timer.startButton}" disabled="false"
+                                       action="#{Timer.startTask}"/>
+                            <af:button text="Pause" id="b24" binding="#{Timer.pauseButton}"
+                                       action="#{Timer.pauseTask}"/>
+                            <af:button text="Finish" id="b25" binding="#{Timer.finishButton}"
+                                       launchListener="#{Timer.OpenButton}" action="#{Timer.endTask}"/>
+                            <af:button text="Cancel" id="b26" binding="#{Timer.cancelButton}"
+                                       action="#{Timer.cancelTask}"/>
+                        </af:toolbar>
+                    </f:facet>
+                    <af:panelStretchLayout id="psl5">
+                        <f:facet name="start"/>
+                        <f:facet name="end"/>
+                        <f:facet name="top"/>
+                        <f:facet name="bottom"/>
+                        <f:facet name="center">
+                            <af:panelGridLayout id="pgl7" dimensionsFrom="parent">
+                                <af:gridRow marginTop="10px" height="auto" id="gr3">
+                                    <af:gridCell marginStart="10px" width="auto" marginEnd="10px" id="gc3"
+                                                 valign="middle" halign="start">
+                                        <af:spacer width="10" height="30" id="s5"/>
+                                        <af:image source="#{resource['images:TeamIcon.png']}" id="i4"/>
+                                        <af:spacer width="10" height="10" id="s9"/>
+                                        <af:outputFormatted value="Team: " id="of8" inlineStyle="font-size:large;"/>
+                                        <af:outputFormatted value="#{bindings.TeamName.inputValue}" id="of4"
+                                                            inlineStyle="font-size:large;"/>
+                                    </af:gridCell>
+                                </af:gridRow>
+                                <af:gridRow marginTop="0px" height="auto" id="gr4">
+                                    <af:gridCell marginStart="10px" width="auto" marginEnd="10px" id="gc4"
+                                                 valign="middle" halign="start">
+                                        <af:spacer width="10" height="30" id="s6"/>
+                                        <af:image source="#{resource['images:StudentIcon.png']}" id="i5"/>
+                                        <af:spacer width="10" height="10" id="s10"/>
+                                        <af:outputFormatted value="User: " id="of9" inlineStyle="font-size:large;"/>
+                                        <af:outputFormatted value="#{bindings.StudentName.inputValue}" id="of5"
+                                                            inlineStyle="font-size:large;"/>
+                                    </af:gridCell>
+                                </af:gridRow>
+                                <af:gridRow marginTop="0px" height="auto" id="gr5">
+                                    <af:gridCell marginStart="10px" width="auto" marginEnd="10px" id="gc5"
+                                                 halign="start">
+                                        <af:spacer width="10" height="30" id="s7"/>
+                                        <af:image id="i6" source="#{resource['images:tareas.png']}"/>
+                                        <af:spacer width="10" height="10" id="s11"/>
+                                        <af:outputFormatted value="Task: " id="of10" inlineStyle="font-size:large;"/>
+                                        <af:outputFormatted value="#{bindings.TaskName.inputValue}" id="of6"
+                                                            inlineStyle="font-size:large;"/>
+                                    </af:gridCell>
+                                </af:gridRow>
+                                <af:gridRow marginTop="0px" height="auto" id="gr6">
+                                    <af:gridCell marginStart="10px" width="auto" marginEnd="10px" id="gc6">
+                                        <af:spacer width="10" height="30" id="s8"/>
+                                        <af:image id="i7" source="#{resource['images:timerIcon.png']}"/>
+                                        <af:spacer width="10" height="10" id="s12"/>
+                                        <af:outputFormatted value="Time Spent: " id="of11"
+                                                            inlineStyle="font-size:large;"/>
+                                        <af:outputFormatted value="#{bindings.Timespent.inputValue}" id="of7"
+                                                            inlineStyle="font-size:large;"/>
+                                    </af:gridCell>
+                                </af:gridRow>
+                            </af:panelGridLayout>
+                        </f:facet>
+                    </af:panelStretchLayout>
+                </af:dialog>
+            </af:popup>
+        </af:form>
+    </af:document>
+    <af:resource type="javascript">
+      function onLoadClient(event) {
+          AdfCustomEvent.queue(event.getSource(), "onloadEvent", 
+          {
+          },
+          false);
+          return true;
+      }
+    </af:resource>
+    <!--oracle-jdev-comment:preferred-managed-bean-name:Timer-->
+</f:view>

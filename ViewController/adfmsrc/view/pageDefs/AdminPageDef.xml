@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pageDefinition xmlns="http://xmlns.oracle.com/adfm/uimodel" version="12.2.1.12.24" id="AdminPageDef"
+                Package="view.pageDefs">
+  <parameters/>
+  <executables>
+    <variableIterator id="variables"/>
+    <iterator Binds="TeamsViewLv1" RangeSize="25" DataControl="AppModuleDataControl" id="TeamsViewLv1Iterator"/>
+    <iterator Binds="UsersViewLv1" RangeSize="25" DataControl="AppModuleDataControl" id="UsersViewLv1Iterator"/>
+    <searchRegion Binds="UsersViewLv1Iterator" Criteria=""
+                  Customizer="oracle.jbo.uicli.binding.JUSearchBindingCustomizer" id="UsersViewLv1Query"/>
+    <iterator Binds="UsersViewLv2" RangeSize="25" DataControl="AppModuleDataControl" id="UsersViewLv2Iterator"/>
+    <iterator Binds="TasksViewLv1" RangeSize="25" DataControl="AppModuleDataControl" id="TasksViewLv1Iterator"/>
+    <searchRegion Binds="TeamsViewLv1Iterator" Criteria=""
+                  Customizer="oracle.jbo.uicli.binding.JUSearchBindingCustomizer" id="TeamsViewLv1Query"/>
+    <searchRegion Binds="TasksViewLv1Iterator" Criteria=""
+                  Customizer="oracle.jbo.uicli.binding.JUSearchBindingCustomizer" id="TasksViewLv1Query"/>
+  </executables>
+  <bindings>
+    <action IterBinding="TeamsViewLv1Iterator" id="Create" RequiresUpdateModel="true" Action="createRow"/>
+    <action IterBinding="TeamsViewLv1Iterator" id="CreateInsert" RequiresUpdateModel="true" Action="createInsertRow"/>
+    <action IterBinding="TeamsViewLv1Iterator" id="Delete" RequiresUpdateModel="false" Action="removeCurrentRow"/>
+    <action id="Commit" RequiresUpdateModel="true" Action="commitTransaction" DataControl="AppModuleDataControl"/>
+    <action id="Rollback" RequiresUpdateModel="false" Action="rollbackTransaction" DataControl="AppModuleDataControl"/>
+    <tree IterBinding="UsersViewLv1Iterator" id="UsersViewLv1">
+      <nodeDefinition DefName="model.UsersView" Name="UsersViewLv10">
+        <AttrNames>
+          <Item Value="Checkmark"/>
+          <Item Value="StudentId"/>
+          <Item Value="StudentName"/>
+          <Item Value="StudentEmail"/>
+          <Item Value="AuthLevel"/>
+          <Item Value="StudentPassword"/>
+          <Item Value="Timespent"/>
+          <Item Value="TeamId"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <action IterBinding="UsersViewLv1Iterator" id="CreateInsert1" RequiresUpdateModel="true" Action="createInsertRow"/>
+    <action IterBinding="UsersViewLv1Iterator" id="Delete1" RequiresUpdateModel="false" Action="removeCurrentRow"/>
+    <action IterBinding="UsersViewLv2Iterator" id="Delete2" RequiresUpdateModel="false" Action="removeCurrentRow"/>
+    <action IterBinding="TasksViewLv1Iterator" id="Delete3" RequiresUpdateModel="false" Action="removeCurrentRow"/>
+    <action IterBinding="TasksViewLv1Iterator" id="CreateInsert3" RequiresUpdateModel="true" Action="createInsertRow"/>
+    <tree IterBinding="TeamsViewLv1Iterator" id="TeamsViewLv1">
+      <nodeDefinition DefName="model.TeamsView" Name="TeamsViewLv10">
+        <AttrNames>
+          <Item Value="Checkmark"/>
+          <Item Value="TeamId"/>
+          <Item Value="TeamName"/>
+          <Item Value="TeamLeaderId"/>
+          <Item Value="Helped"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <attributeValues IterBinding="TeamsViewLv1Iterator" id="TeamName">
+      <AttrNames>
+        <Item Value="TeamName"/>
+      </AttrNames>
+    </attributeValues>
+    <attributeValues IterBinding="UsersViewLv1Iterator" id="StudentName">
+      <AttrNames>
+        <Item Value="StudentName"/>
+      </AttrNames>
+    </attributeValues>
+    <attributeValues IterBinding="TasksViewLv1Iterator" id="TaskName">
+      <AttrNames>
+        <Item Value="TaskName"/>
+      </AttrNames>
+    </attributeValues>
+    <tree IterBinding="TasksViewLv1Iterator" id="TasksViewLv1">
+      <nodeDefinition DefName="model.TasksView" Name="TasksViewLv10">
+        <AttrNames>
+          <Item Value="TaskId"/>
+          <Item Value="TaskName"/>
+          <Item Value="TaskType"/>
+          <Item Value="Starttime"/>
+          <Item Value="Status"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <attributeValues IterBinding="UsersViewLv1Iterator" id="Timespent">
+      <AttrNames>
+        <Item Value="Timespent"/>
+      </AttrNames>
+    </attributeValues>
+  </bindings>
+</pageDefinition>
